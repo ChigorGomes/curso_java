@@ -1,6 +1,7 @@
 package com.javapoo.excecoes.personalizadas.program;
 
-import com.javapoo.excecoes.personalizadas.entities.Reservation;
+import com.javapoo.excecoes.personalizadas.model.entities.Reservation;
+import com.javapoo.excecoes.personalizadas.model.exceptions.DomainException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,23 +9,23 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class Program {
-    public static void main(String[] args) throws ParseException { //metodo que pode lançar a exceção
+    public static void main(String[] args) { //metodo que pode lançar a exceção
         Scanner scanner = new Scanner(System.in);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        System.out.print("Room number: ");
-        int number = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("check-in date (dd/MM/yyyy): ");
-        String dateCheckinAux = scanner.nextLine();
-        Date dateCheckin = sdf.parse(dateCheckinAux);
-        System.out.print("check-out date (dd/MM/yyyy): ");
-        String dateCheckoutAux = scanner.nextLine();
-        Date dateCheckout = sdf.parse(dateCheckoutAux);
+        try {
 
-        if (!dateCheckout.after(dateCheckin)) {
-            System.out.println("Error in reservation: Check-out date must ber after check-in date");
-        } else {
+            System.out.print("Room number: ");
+            int number = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("check-in date (dd/MM/yyyy): ");
+            String dateCheckinAux = scanner.nextLine();
+            Date dateCheckin = sdf.parse(dateCheckinAux);
+            System.out.print("check-out date (dd/MM/yyyy): ");
+            String dateCheckoutAux = scanner.nextLine();
+            Date dateCheckout = sdf.parse(dateCheckoutAux);
+
+
             Reservation reservation = new Reservation(number, dateCheckin, dateCheckout);
             System.out.println(reservation);
 
@@ -37,16 +38,16 @@ public class Program {
             dateCheckout = sdf.parse(dateCheckoutAux);
 
 
-            String error = reservation.updateDates(dateCheckin, dateCheckout);
-            if (error != null) {
-                System.out.println("Error in reservation: " + error);
-            } else {
-                System.out.println(reservation);
-            }
+            reservation.updateDates(dateCheckin, dateCheckout);
+            System.out.println(reservation);
 
-
+        } catch (ParseException e) {
+            System.out.println("Invalid date format");
+        } catch (DomainException e) {
+            System.out.println("Error in reservation: " + e.getMessage());
+        } catch (RuntimeException e) {
+            System.out.println("Unexpected error");
         }
-
 
         scanner.close();
     }
