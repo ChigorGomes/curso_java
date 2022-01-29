@@ -12,5 +12,8 @@
 * Enumerações, composição
 ## - Java05
 * Herança e polimorfismo
-
+## - Java06
+* Tratamento de exceções
+## - Java07
+* Tratamento de exceções: Exercício
 
